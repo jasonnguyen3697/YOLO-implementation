@@ -1,12 +1,14 @@
 import keras
 from keras import backend as k
+from keras.regularizers import l2
 from keras.layers import Conv2D, AvgPool2D, BatchNormalization, MaxPool2D, Dense, Activation, Input, LeakyReLU, Reshape
 from keras.models import Model
 import tensorflow as tf
 import numpy
 
-def preTrainX(samples, rows, cols):
-    """This method creates the convolution neural network model of YOLO algorithm"""
+def preTrainModel(samples, rows, cols):
+    """This method creates the first 20 layers of the YOLO convolutional network for pre-training"""
+
     XInput = Input(shape=(samples, rows, cols, 3))
 
     X = Conv2D(filters=64, kernel_size=7, strides=2)(XInput)
@@ -64,18 +66,30 @@ def preTrainX(samples, rows, cols):
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = Conv2D(filters=1024, kernel_size=3, strides=2)(X)
+    X = LeakyReLU(alpha=0.1, name='pre-train output')(X)
+
+    X = AvgPool2D(pool_size=2, strides=2)(X)
+    X = Dense(units=4096, kernel_regularizer=l2())(X)
+
+    model = Model(inputs=XInput, outputs=X)
+
+    return model
+
+def yoloModel(preTrainModel):
+    """This method creates the rest of the YOLO convolutional neural network using pre-trained model"""
+
+    X = Conv2D(filters=1024, kernel_size=3, padding='same')(preTrainModel.get_layer('pre-train output').output)
+    X = LeakyReLU(alpha=0.1)(X)
+    X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
 
-    #X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
-    #X = LeakyReLU(alpha=0.1)(X)
-    #X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
-    #X = LeakyReLU(alpha=0.1)(X)
+    X = Dense(units=4096)(X)
+    X = LeakyReLU(alpha=0.1)(X)
+    X = Dense(units=1470)(X)
+    X = Reshape((7, 7, 30))(X)
 
-    #X = Dense(units=4096)(X)
-    #X = LeakyReLU(alpha=0.1)(X)
-    #X = Dense(units=1470)(X)
-    #X = Reshape((7, 7, 30))(X)
+    model = Model(inputs=preTrainModel.input, outputs=X)
 
-    #model = Model(inputs=XInput, outputs=X)
+    return model
 
-    return X
+def loss(YTrain, YPred):
