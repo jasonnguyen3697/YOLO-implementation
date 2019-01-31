@@ -78,7 +78,7 @@ def preTrainModel(rows, cols):
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = Conv2D(filters=1024, kernel_size=3, strides=2)(X)
-    X = LeakyReLU(alpha=0.1, name='pre-train output')(X)
+    X = LeakyReLU(alpha=0.1, name='pre_train_output')(X)
 
     X = AvgPool2D(pool_size=2, strides=2)(X)
     X = Dense(units=4096, kernel_regularizer=l2())(X)
@@ -90,7 +90,7 @@ def preTrainModel(rows, cols):
 def yoloModel(preTrainModel):
     """This method creates the rest of the YOLO convolutional neural network using pre-trained model"""
 
-    X = Conv2D(filters=1024, kernel_size=3, padding='same')(preTrainModel.get_layer('pre-train output').output)
+    X = Conv2D(filters=1024, kernel_size=3, padding='same')(preTrainModel.get_layer('pre_train_output').output)
     X = LeakyReLU(alpha=0.1)(X)
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
