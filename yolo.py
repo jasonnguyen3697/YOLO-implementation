@@ -3,13 +3,25 @@ from keras import backend as k
 from keras.regularizers import l2
 from keras.layers import Conv2D, AvgPool2D, BatchNormalization, MaxPool2D, Dense, Activation, Input, LeakyReLU, Reshape
 from keras.models import Model
+from keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import numpy
 
-def preTrainModel(samples, rows, cols):
+def loadData(dim):
+    """Load images according to the desired dimensions"""
+
+    #create data generator
+    datagen = ImageDataGenerator(validation_split=0.1, rescale=1./255)
+
+    train_generator = datagen.flow_from_directory('Object Recognition Dataset/Training set/256_ObjectCategories', target_size=dim, batch_size=16, subset='training')
+    val_generator = datagen.flow_from_directory('Object Recognition Dataset/Training set/256_ObjectCategories', target_size=dim, batch_size=16, subset='validation')
+
+    return train_generator, val_generator
+
+def preTrainModel(rows, cols):
     """This method creates the first 20 layers of the YOLO convolutional network for pre-training"""
 
-    XInput = Input(shape=(samples, rows, cols, 3))
+    XInput = Input(shape=(rows, cols, 3))
 
     X = Conv2D(filters=64, kernel_size=7, strides=2)(XInput)
     X = LeakyReLU(alpha=0.1)(X)
@@ -92,4 +104,4 @@ def yoloModel(preTrainModel):
 
     return model
 
-def loss(YTrain, YPred):
+#def loss(YTrain, YPred):
