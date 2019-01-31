@@ -6,6 +6,7 @@ def main():
 
     #create pre-training model
     model = yolo.preTrainModel(224, 224)
+    print(model.summary())
     model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
     model.fit_generator(training, steps_per_epoch=1728, epochs=3, validation_data=validation, validation_steps=186)
 

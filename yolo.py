@@ -1,7 +1,7 @@
 import keras
 from keras import backend as k
 from keras.regularizers import l2
-from keras.layers import Conv2D, AvgPool2D, BatchNormalization, MaxPool2D, Dense, Activation, Input, LeakyReLU, Reshape
+from keras.layers import Conv2D, AvgPool2D, BatchNormalization, MaxPool2D, Dense, Activation, Input, LeakyReLU, Reshape, Flatten
 from keras.models import Model
 from keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
@@ -23,7 +23,7 @@ def preTrainModel(rows, cols):
 
     XInput = Input(shape=(rows, cols, 3))
 
-    X = Conv2D(filters=64, kernel_size=7, strides=2)(XInput)
+    X = Conv2D(filters=64, kernel_size=7, strides=2, padding='same')(XInput)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
     X = LeakyReLU(alpha=0.1)(X)
@@ -81,7 +81,8 @@ def preTrainModel(rows, cols):
     X = LeakyReLU(alpha=0.1, name='pre_train_output')(X)
 
     X = AvgPool2D(pool_size=2, strides=2)(X)
-    X = Dense(units=4096, kernel_regularizer=l2())(X)
+    X = Flatten()(X)
+    X = Dense(units=257, kernel_regularizer=l2(), activation='softmax')(X)
 
     model = Model(inputs=XInput, outputs=X)
 
