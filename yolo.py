@@ -82,7 +82,7 @@ def preTrainModel(rows, cols):
 
     X = AvgPool2D(pool_size=2, strides=2)(X)
     X = Flatten()(X)
-    X = Dense(units=257, kernel_regularizer=l2(), activation='softmax')(X)
+    X = Dense(units=257, activation='softmax')(X)
 
     model = Model(inputs=XInput, outputs=X)
 
