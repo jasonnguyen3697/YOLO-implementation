@@ -4,6 +4,7 @@ from keras.regularizers import l2
 from keras.layers import Conv2D, AvgPool2D, BatchNormalization, MaxPool2D, Dense, Activation, Input, LeakyReLU, Reshape, Flatten
 from keras.models import Model
 from keras.preprocessing.image import ImageDataGenerator
+from keras.optimizers import SGD
 import tensorflow as tf
 import numpy
 
@@ -26,57 +27,70 @@ def preTrainModel(rows, cols):
     X = Conv2D(filters=64, kernel_size=7, strides=2, padding='same')(XInput)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
-    X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=192, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
-    X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=128, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=256, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
+
+    X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
+    X = LeakyReLU(alpha=0.1)(X)
+
+    X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
-    X = LeakyReLU(alpha=0.1)(X)
-    X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
-    X = LeakyReLU(alpha=0.1)(X)
-    X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
-    X = LeakyReLU(alpha=0.1)(X)
-    X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
-    X = LeakyReLU(alpha=0.1)(X)
-    X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
-    X = LeakyReLU(alpha=0.1)(X)
-    X = MaxPool2D(pool_size=2, strides=2)(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+    X = MaxPool2D(pool_size=2, strides=2)(X)
+
     X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
+    X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
+    X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
     X = LeakyReLU(alpha=0.1)(X)
+
+    X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
+    X = LeakyReLU(alpha=0.1)(X)
+
     X = Conv2D(filters=1024, kernel_size=3, strides=2)(X)
     X = LeakyReLU(alpha=0.1, name='pre_train_output')(X)
 
