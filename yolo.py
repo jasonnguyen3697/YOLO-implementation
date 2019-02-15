@@ -14,8 +14,8 @@ def loadData(dim):
     #create data generator
     datagen = ImageDataGenerator(validation_split=0.1, rescale=1./255)
 
-    train_generator = datagen.flow_from_directory('Object Recognition Dataset/Training set/256_ObjectCategories', target_size=dim, batch_size=16, subset='training')
-    val_generator = datagen.flow_from_directory('Object Recognition Dataset/Training set/256_ObjectCategories', target_size=dim, batch_size=16, subset='validation')
+    train_generator = datagen.flow_from_directory('caltech-256-image-dataset/256_ObjectCategories', target_size=dim, batch_size=256, subset='training')
+    val_generator = datagen.flow_from_directory('caltech-256-image-dataset/256_ObjectCategories', target_size=dim, batch_size=256, subset='validation')
 
     return train_generator, val_generator
 
@@ -25,73 +25,95 @@ def preTrainModel(rows, cols):
     XInput = Input(shape=(rows, cols, 3))
 
     X = Conv2D(filters=64, kernel_size=7, strides=2, padding='same')(XInput)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
 
     X = Conv2D(filters=192, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
 
     X = Conv2D(filters=128, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=256, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
 
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=256, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
     X = MaxPool2D(pool_size=2, strides=2)(X)
 
     X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=512, kernel_size=1, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=1024, kernel_size=3, padding='same')(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1)(X)
 
     X = Conv2D(filters=1024, kernel_size=3, strides=2)(X)
+    X = BatchNormalization()(X)
     X = LeakyReLU(alpha=0.1, name='pre_train_output')(X)
 
     X = AvgPool2D(pool_size=2, strides=2)(X)

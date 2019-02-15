@@ -4,3 +4,6 @@ Object Recognition Dataset
 .idea
 __pycache__
 yolov3
+caltech-256-image-dataset
+caltech-256-image-dataset.zip
+*.h5
