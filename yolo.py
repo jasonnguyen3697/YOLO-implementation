@@ -14,8 +14,8 @@ def loadData(dim):
     #create data generator
     datagen = ImageDataGenerator(validation_split=0.1, rescale=1./255)
 
-    train_generator = datagen.flow_from_directory('caltech-256-image-dataset/256_ObjectCategories', target_size=dim, batch_size=256, subset='training')
-    val_generator = datagen.flow_from_directory('caltech-256-image-dataset/256_ObjectCategories', target_size=dim, batch_size=256, subset='validation')
+    train_generator = datagen.flow_from_directory('caltech-256-image-dataset/256_ObjectCategories', target_size=dim, batch_size=128, subset='training')
+    val_generator = datagen.flow_from_directory('caltech-256-image-dataset/256_ObjectCategories', target_size=dim, batch_size=128, subset='validation')
 
     return train_generator, val_generator
 
