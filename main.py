@@ -14,7 +14,7 @@ def main():
     print(model.summary())
     model = multi_gpu_model(model, gpus=2)
     model.compile(optimizer=yolo.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True), loss='categorical_crossentropy', metrics=['accuracy'])
-    model.fit_generator(training, steps_per_epoch=27644//128, epochs=10000, validation_data=validation, validation_steps=2963//128)
+    model.fit_generator(training, steps_per_epoch=27644//128, epochs=5000, validation_data=validation, validation_steps=2963//128)
 
     #save model
     model.save_weights('preTrainModel.h5')
